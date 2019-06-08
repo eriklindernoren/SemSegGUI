@@ -48,7 +48,7 @@ void addTextLines(Mat image, int x, int y, vector<string> lines) {
   int x_left = x - paddingX;
   // Upper left and bottom right corners of the rectangle
   Point upperLeft = Point(x_left, y_top);
-  Point bottomRight = Point(x_left + text.width + paddingX, y_top + n*text.height + (n-1) * linePadding);
+  Point bottomRight = Point(x_left + text.width + 2*paddingX, y_top + n*text.height + (n-1) * linePadding);
   rectangle(image, upperLeft, bottomRight, Scalar(0, 0, 0), CV_FILLED);
 
   // Draw text lines on top of the rectangle

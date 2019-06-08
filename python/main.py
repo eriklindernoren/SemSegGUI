@@ -8,7 +8,7 @@ from utils import visualize, load_image, load_annotation
 from contour_tracing import MooreNeighborTracer
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Parser for Fast-Neural-Style")
+    parser = argparse.ArgumentParser(description="Parser")
     parser.add_argument("--image_path", type=str, required=False, help="path to image")
     parser.add_argument("--annotation_path", type=str, required=False, help="path to semantic mask")
     args = parser.parse_args()

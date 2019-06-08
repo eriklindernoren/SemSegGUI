@@ -5,6 +5,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <iostream>
 #include <string>
+#include "cnpy.h"
 
 using namespace cv;
 using namespace std;
@@ -22,10 +23,10 @@ int main(int argc, char** argv ) {
 
   // Extract segmentation mask
   char* mask_path = argv[2];
-  Mat semseg = loadImage(mask_path);
 
-  printf("(%d x %d x %d)\n", semseg.rows, semseg.cols, semseg.channels());
-  Mask mask = Mask(semseg);
+  Mask mask(mask_path);
+
+  cout << mask.getRows() << " " << mask.getCols() << " " << mask.getClasses() << endl;
 
   // Extract segments from mask
   vector<Segment*> segments = extractSegments(mask);
@@ -37,6 +38,7 @@ int main(int argc, char** argv ) {
 
   // Free allocated memory
   free(segments);
+
 
   return 0;
 }

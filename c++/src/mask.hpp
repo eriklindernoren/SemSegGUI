@@ -1,10 +1,13 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc.hpp>
+#include "cnpy.h"
 #include <map>
+#include <vector>
 
 using namespace std;
 using namespace cv;
+using namespace cnpy;
 
 #ifndef MAXACTIVATION_H
 #define MAXACTIVATION_H
@@ -23,16 +26,20 @@ typedef struct MaxActivation {
 #define MASK_H
 
 class Mask {
-    Mat mask;
+    vector<vector<vector<double>>> mask;
     map<int, MaxActivation> activations;
+    int rows;
+    int cols;
+    int cls;
 
   private:
     int getKey(int, int);
   public:
-    Mask(Mat&);
+    Mask(char *filename);
     MaxActivation getLabelAndScore(int, int);
     int getRows();
     int getCols();
+    int getClasses();
     bool boundaryCheck(int, int);
 };
 
