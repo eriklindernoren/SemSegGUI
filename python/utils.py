@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import numpy as np
 import cv2
 
@@ -9,21 +8,47 @@ def load_image(image_path):
 
 
 def load_annotation(annotation_path):
-    ann = cv2.imread(annotation_path)
-    ann = ann[..., :1]
+    ann = np.load(annotation_path)
     return ann
 
 
+def get_max_text_size(textlines, fontface, scale, thickness):
+    max_size, _ = cv2.getTextSize(textlines[0], fontface, scale, thickness)
+    for s in textlines[1:]:
+        size, _ = cv2.getTextSize(s, fontface, scale, thickness)
+        if size[0] > max_size[0]:
+            max_size = size
+    return max_size
+
+
 def add_text(image, x, y, textlines):
+    fontface = cv2.FONT_HERSHEY_SIMPLEX
+    scale = 0.4
+    thickness = 1
+    line_padding = 30
+    padding_x = 5
+    padding_y = 15
+    n = len(textlines)
+
+    text_width, text_height = get_max_text_size(textlines, fontface, scale, thickness)
+
+    # Top left coordinate
+    y_top = y - text_height - padding_y
+    x_left = x - padding_x
+    # Upper left and bottom right corners of the rectangle
+    upper_left = (x_left, y_top)
+    bottom_right = (x_left + text_width + 2 * padding_x, y_top + n * text_height + (n - 1) * line_padding)
+    cv2.rectangle(image, upper_left, bottom_right, (0, 0, 0), -100)
+
     for line in textlines:
         cv2.putText(
-            image, line, (x, y), fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=0.8, color=(255, 255, 255), thickness=1
+            image, line, (x, y), fontFace=fontface, fontScale=scale, color=(255, 255, 255), thickness=thickness
         )
-        y += 30
+        y += line_padding
 
 
 def visualize(image, polygons=None):
-    def visualize_meta(event, x, y, flags, param):
+    def mouse_callback(event, x, y, flags, param):
 
         if event == cv2.EVENT_LBUTTONUP:
             poly = [p for p in polygons if p.seen((y, x))][0]
@@ -36,13 +61,14 @@ def visualize(image, polygons=None):
                     f"PID: {poly.id}",
                     f"Label: {poly.label}",
                     f"Score: {poly.points[(y, x)].score}",
+                    f"Segment Score: {poly.score}",
                 ],
             )
 
     cv2.namedWindow("image")
-    cv2.setMouseCallback("image", visualize_meta)
+    cv2.setMouseCallback("image", mouse_callback)
 
-    clone = image.copy()
+    image_clone = image.copy()
 
     # Loop until 'q' is pressed
     while True:
@@ -57,8 +83,8 @@ def visualize(image, polygons=None):
 
         # Press 'r' to reset the cropping region
         if key == ord("r"):
-            image = clone.copy()
+            image = image_clone.copy()
 
         # Press 'c' to break from the loop
-        elif key == ord("c"):
+        elif key in [ord("q"), ord("c")]:
             break
