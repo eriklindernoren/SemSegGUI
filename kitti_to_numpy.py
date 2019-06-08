@@ -11,12 +11,10 @@ if __name__ == "__main__":
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
     h, w = image.shape[:2]
-    classes = np.unique(image[..., 0])
+    x = np.zeros((h, w, image[..., 0].max() + 1))
 
-    x = np.zeros((h, w, classes.max() + 1))
-
-    for r in range(x.shape[0]):
-        for c in range(x.shape[1]):
+    for r in range(h):
+        for c in range(w):
             x[r, c, image[r, c, 0]] = 1
 
     filename = args.segmentation_path.split("/")[-1].split(".")[0]
