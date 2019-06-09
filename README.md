@@ -63,7 +63,7 @@ argparse
 + main.py               : Main file
 + pixel.py              : Class representing a pixel (contains label and score at that coordinate)
 + processor.py          : Methods to extract segments from semantic segmentation
-+ segment.{hpp/cpp}     : Class representing an image segment. Contains list of pixels and contour 
++ segment.py            : Class representing an image segment. Contains list of pixels and contour 
                           pixels that belong to said segment
 + utils.py              : Helper methods for loading and reading input data
 ```
