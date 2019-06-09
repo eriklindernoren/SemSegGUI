@@ -11,9 +11,9 @@ using namespace cv;
 using namespace std;
 
 int main(int argc, char** argv ) {
-  if( argc != 3)
+  if( argc != 4)
   {
-   cout <<" Usage: app <image-path> <semseg-path>" << endl;
+   cout <<" Usage: app <image-path> <semseg-path> <label-path>" << endl;
    return -1;
   }
 
@@ -25,14 +25,20 @@ int main(int argc, char** argv ) {
   char* semseg_path = argv[2];
   Semseg semseg(semseg_path);
 
-  cout << "Segmentation shape: " << semseg.getRows() << " x " << semseg.getCols() << " x " << semseg.getClasses() << endl;
+  printf("Segmentation shape: %d x %d x %d\n", semseg.getRows(), semseg.getCols(), semseg.getClasses());
+
+  // Extract class labels
+  char* label_path = argv[3];
+  vector<string> labels = extractLabels(label_path);
+
+  printf("Number of classes: %d\n", (int)labels.size());
 
   // Extract segments from semseg
   vector<Segment*> segments = extractSegments(semseg);
   printf("Number of Segments %d\n", (int)segments.size());
 
   // Visualize segments
-  visualize(image, segments);
+  visualize(image, segments, labels);
 
   // Free allocated memory
   free(segments);

@@ -31,6 +31,12 @@ def load_segmentation(segmentation_path):
     return segm
 
 
+def extract_labels(label_path):
+    with open(label_path) as f:
+        labels = f.read().splitlines()
+    return labels
+
+
 def get_max_text_size(textlines, fontface, scale, thickness):
     max_size, _ = cv2.getTextSize(textlines[0], fontface, scale, thickness)
     for s in textlines[1:]:
@@ -46,14 +52,14 @@ def add_text(image, x, y, textlines):
     thickness = 1
     line_padding = 30
     padding_x = 5
-    padding_y = 15
+    padding_y = 30
     n = len(textlines)
     h, w = image.shape[:2]
 
     text_width, text_height = get_max_text_size(textlines, fontface, scale, thickness)
 
     # Top left coordinate
-    y_top = y - text_height - padding_y
+    y_top = y - padding_y
     x_left = x - padding_x
     # Upper left and bottom right corners of the rectangle
     upper_left = (x_left, y_top)
@@ -81,7 +87,7 @@ def draw_contours(image, polygons, color_map):
         image[pixels[:, 0], pixels[:, 1]] = color_map[p.label]
 
 
-def visualize(image, polygons):
+def visualize(image, polygons, labels):
     def mouse_callback(event, x, y, flags, param):
 
         if event == cv2.EVENT_LBUTTONUP:
@@ -92,10 +98,11 @@ def visualize(image, polygons):
                 y,
                 [
                     f"Point: ({x}, {y})",
-                    f"PID: {poly.id}",
+                    f"Name: {labels[poly.label]}",
                     f"Label: {poly.label}",
                     f"Score: {poly.points[(y, x)].score}",
                     f"Segment Score: {poly.score}",
+                    f"Segment ID: {poly.id}",
                 ],
             )
 

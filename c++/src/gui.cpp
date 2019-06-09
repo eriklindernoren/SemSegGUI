@@ -4,7 +4,7 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
-
+#include <fstream>
 
 template <typename T>
 string toStr( const T & t ) {
@@ -17,6 +17,15 @@ string toStr( const T & t ) {
 Mat loadImage(char* filename) {
   Mat image = imread(filename, CV_LOAD_IMAGE_COLOR);
   return image;
+}
+
+vector<string> extractLabels(char* filename) {
+  ifstream file(filename);
+  vector<string> labels;
+  string str;
+  while(getline(file, str))
+    labels.push_back(str);
+  return labels;
 }
 
 
@@ -41,7 +50,7 @@ void addTextLines(Mat image, int x, int y, vector<string> lines) {
   int baseline = 0;
   int linePadding = 30;
   int paddingX = 5;
-  int paddingY = 15;
+  int paddingY = 30;
 
   int n = lines.size();
 
@@ -49,7 +58,7 @@ void addTextLines(Mat image, int x, int y, vector<string> lines) {
   Size text = getMaxTextSize(lines, fontface, scale, thickness, baseline);
 
   // Top left corner of rectangle
-  int y_top = y - text.height - paddingY;
+  int y_top = y - paddingY;
   int x_left = x - paddingX;
   // Upper left and bottom right corners of the rectangle
   Point upperLeft = Point(x_left, y_top);
@@ -80,6 +89,7 @@ void mouseCallback(int event, int x, int y, int flags, void* userdata)
         CallbackParams* params = (CallbackParams*) userdata;
         Mat image = params->image;
         vector<Segment*> segments = params->segments;
+        vector<string> labels = params->labels;
 
         // Find the segment that was clicked
         Segment* s = segmentCorrespondingToPoint(segments, x, y);
@@ -91,10 +101,11 @@ void mouseCallback(int event, int x, int y, int flags, void* userdata)
         // Define metadata to be visualized
         vector<string> lines;
         lines.push_back(toStr("Point (") + toStr(x) + toStr(", ") + toStr(y) + toStr(")"));
+        lines.push_back(toStr("Name ") + toStr(labels[s->getLabel()]));
         lines.push_back(toStr("Label ") + toStr(s->getLabel()));
         lines.push_back(toStr("Score ") + toStr(s->getPixel(x, y).score));
         lines.push_back(toStr("Segment Score ") + toStr(s->getScore()));
-        lines.push_back(toStr("PID ") + toStr(s->getId()));
+        lines.push_back(toStr("Segment ID ") + toStr(s->getId()));
 
         // Draw metadata
         addTextLines(image, x, y, lines);
@@ -120,7 +131,7 @@ void drawContours(Mat& image, vector<Segment*> segments, map<int, vector<int>> c
 }
 
 
-void visualize(Mat image, vector<Segment*> segments) {
+void visualize(Mat image, vector<Segment*> segments, vector<string> labels) {
 
   // Get label to color map and draw contours
   map<int, vector<int>> colorMap = getColorMap(segments);
@@ -130,6 +141,7 @@ void visualize(Mat image, vector<Segment*> segments) {
   CallbackParams params;
   params.image = image;
   params.segments = segments;
+  params.labels = labels;
 
   // Create a clone to enable frame resets
   Mat imageCopy = image.clone();

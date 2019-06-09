@@ -1,7 +1,7 @@
 # Apple Home Assignment
 
 <p align="center">
-    <img src="assets/gui.png" width="600"\>
+    <img src="assets/app.png" width="600"\>
 </p>
 
 ## Preprocessing
@@ -35,7 +35,7 @@ the steps in [this answer](https://github.com/rogersce/cnpy/issues/34#issuecomme
 + main.cpp              : Main file
 + pixel.{hpp/cpp}       : Class representing a pixel (contains score and label)
 + processor.{hpp/cpp}   : Extracts segments from the semantic segmentation
-+ segment.{hpp/cpp}     : Class representing each image segment. Contains segment pixels 
++ segment.{hpp/cpp}     : Class representing each image segment. Contains segment pixels
                           and contour pixels.
 + semseg.{hpp/cpp}      : Class representing semantic segmentation
 ```
@@ -43,7 +43,7 @@ the steps in [this answer](https://github.com/rogersce/cnpy/issues/34#issuecomme
 ### Run
 ```
 cd c++/
-./app ../data/kitti/image_2/000010_10.png ../data/000010_10.npy
+./app ../data/kitti/image_2/000010_10.png ../data/000010_10.npy ../data/kitti/labels.txt
 ```
 
 ## Python
@@ -60,7 +60,7 @@ argparse
 + main.py               : Main file
 + processor.py          : File containing classes representing segments and pixels. Extracts segments
                           from semantic segmentation.
-+ utils.py              : Contains gui operations as well as helper methods for loading image and 
++ utils.py              : Contains gui operations as well as helper methods for loading image and
                           semantic segmentation.
 ```
 
@@ -68,5 +68,6 @@ argparse
 ```
 cd python/
 python3 main.py --image_path ../data/kitti/image_2/000010_10.png \
-                --segmentation_path ../data/000010_10.npy
+                --segmentation_path ../data/000010_10.npy \
+                --label_path ../data/kitti/labels.txt
 ```
