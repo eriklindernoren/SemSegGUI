@@ -49,8 +49,8 @@ def add_text(image, x, y, textlines):
     rect_height = n * text_height + (n - 1) * line_padding
     rect_width = text_width + 2 * padding_x
     # Top-left coordinate of rect (ensure we don't draw out of frame)
-    y_top = min(h - rect_height, y - padding_y)
-    x_left = min(w - rect_width, x - padding_x)
+    y_top = min(h - rect_height, max(0, y - padding_y))
+    x_left = min(w - rect_width, max(0, x - padding_x))
     # Upper left and bottom right corners of the rectangle
     upper_left = (x_left, y_top)
     bottom_right = (x_left + rect_width, y_top + rect_height)

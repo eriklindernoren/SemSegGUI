@@ -96,8 +96,8 @@ void addTextLines(Mat image, int x, int y, vector<string> lines) {
   int rectHeight = n * text.height + (n - 1) * linePadding;
   int rectWidth = text.width + 2 * paddingX;
   // Ensure we don't draw rect out of frame
-  int yTop = min(imgHeight - rectHeight, y - paddingY);
-  int xLeft = min(imgWidth - rectWidth, x - paddingX);
+  int yTop = min(imgHeight - rectHeight, max(0, y - paddingY));
+  int xLeft = min(imgWidth - rectWidth, max(0, x - paddingX));
   // Upper left and bottom right corners of the rectangle
   Point upperLeft = Point(xLeft, yTop);
   Point bottomRight = Point(
