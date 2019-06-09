@@ -34,7 +34,7 @@ Mat loadImage(char* filename) {
 
 
 /**
-    Extract class names contained in file which filename points to
+    Extract class names contained in file
 
     @param filename : filename pointing to text file with class names
     @return vector of class names
@@ -196,9 +196,9 @@ void drawContours(Mat& image, vector<Segment*> segments, map<int, vector<int>> c
 
 
 /**
-    Main GUI method. Calls other methods extract color map, draw image (with contours)
+    Main GUI method. Calls other methods to extract color map, draw image (with contours)
     and sets up callback for mouse click events. Then waits for key press to reset the frame
-    or the close the GUI.
+    or to the close the GUI.
 
     @param image
     @param segments : image segments

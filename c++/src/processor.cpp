@@ -3,11 +3,11 @@
 
 
 /**
-    Returns all neighboring point of (x, y)
+  Returns all neighboring points of (x, y)
 
-    @param x : x coordinate of point
-    @param y : y coordinate of point
-    @return a vector of neighboring points to (x, y)
+  @param x : x coordinate of point
+  @param y : y coordinate of point
+  @return a vector of neighboring points to (x, y)
 */
 vector<vector<int>> getNeighbors(int x, int y) {
   vector<vector<int>> deltas = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {-1, -1}, {1, 1}, {-1, 1}, {1, -1}};
@@ -22,15 +22,15 @@ vector<vector<int>> getNeighbors(int x, int y) {
 
 
 /**
-    Explore points contained in segment through three search (dfs). Adds pixels
-    contained in the segment to a segment object (along with contour points), and finally
-    returns the segment object when all pixels have been visited.
+  Explore points contained in segment through tree search (dfs). Adds pixels
+  contained in the segment to a segment object (along with contour points), and finally
+  returns the segment object when all pixels have been visited.
 
-    @param semseg : semantic segmentation
-    @param x : x coordinate of starting point
-    @param y : y coordinate of starting point
-    @param segmentId : id of the segment that is returned
-    @return a new segment object containing all member pixels
+  @param semseg : semantic segmentation
+  @param x : x coordinate of starting point
+  @param y : y coordinate of starting point
+  @param segmentId : id of the segment that is returned
+  @return a new segment object containing all member pixels
 */
 Segment* extractSegment(Semseg& semseg, int x, int y, int segmentId) {
   // Extract label and score at coordinate
@@ -75,10 +75,10 @@ Segment* extractSegment(Semseg& semseg, int x, int y, int segmentId) {
 
 
 /**
-    Extracts all segments from semantic segmentation 'semseg'
+  Extracts all segments from semantic segmentation input
 
-    @param semseg : semantic segmentation, shaped (H x W x NumClasses)
-    @return a vector of pointers to image segments (class Segment)
+  @param semseg : semantic segmentation, shaped (H x W x NumClasses)
+  @return a vector of pointers to image segments (class Segment)
 */
 vector<Segment*> extractSegments(Semseg& semseg) {
   vector<Segment*> segments;

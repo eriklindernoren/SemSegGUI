@@ -21,7 +21,7 @@ typedef struct MaxActivation {
 #define SEMSEG_H
 
 
-// Class representing the semantic segmentation
+// Class representing the semantic segmentation input
 class Semseg {
     vector<vector<vector<double>>> semseg;
     map<int, MaxActivation> activations;

@@ -2,7 +2,7 @@
 
 /**
   Comparison operator for Pixel objects. Utilizes unique key derived from
-  its x and y coordinates.
+  each pixel's x and y coordinates.
 */
 inline bool operator<(const Pixel& lhs, const Pixel& rhs) {
   return lhs.key < rhs.key;
@@ -36,7 +36,7 @@ Segment::~Segment() {}
 
 
 /**
-  Returns a unique key given the point (x, y)
+  Returns a unique key derived from the coordinate (x, y)
 
   @param x : x coordinate of point
   @param y : y coordinate of point

@@ -1,61 +1,6 @@
+from pixel import Pixel
+from segment import Segment
 import numpy as np
-
-
-class Pixel:
-    """Class representing image segmentation pixel. Contains label and score.
-
-    Parameters:
-    -----------
-    y: int
-        y coordinate
-    x: int
-        x coordinate
-    label: int
-        segment label
-    score: float
-        label confidence
-    """
-
-    def __init__(self, y, x, label, score):
-        self.y = y
-        self.x = x
-        self.label = label
-        self.score = score
-
-
-class Segment:
-    """Class representing image segment. Contains corresponding pixels and
-    contour pixels.
-
-    Parameters:
-    -----------
-    label: int
-        segment label
-    id: float
-        segment id
-    """
-
-    def __init__(self, label, id):
-        self.label = label
-        self.contour_pixels = set()
-        self.pixels = {}
-        self.id = id
-        self.score = 0
-
-    def seen(self, pixel):
-        """True / False depending on if pixel is contained in segment"""
-        return pixel in self.pixels
-
-    def add_contour_pixel(self, pixel):
-        """Add as contour pixel"""
-        self.contour_pixels.add(pixel)
-
-    def add_pixel(self, pixel, label, score):
-        """Add pixel as segment member and update segment score"""
-        y, x = pixel
-        n = len(self.pixels)
-        self.score = (n * self.score + score) / (n + 1)
-        self.pixels[pixel] = Pixel(y, x, label, score)
 
 
 def get_neighbors(point):
@@ -68,7 +13,8 @@ def get_neighbors(point):
 
 def extract_segment(semseg, point, segment_id):
     """Uses tree search (dfs) to explore points within the segment.
-    Adds all points within the segment as members of the segment as stores contour points seperately.
+    Adds all points within the segment as members of the segment and stores points at the border
+    of the segment as contour points.
 
     Parameters:
     -----------

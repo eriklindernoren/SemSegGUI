@@ -3,10 +3,10 @@ import os
 import sys
 import random
 import numpy as np
-from utils import visualize
 from utils import load_image
 from utils import load_segmentation
 from utils import extract_labels
+from gui import visualize
 from processor import extract_segments
 
 if __name__ == "__main__":

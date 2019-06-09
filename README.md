@@ -5,7 +5,7 @@
 
 # Semantic Segmentation GUI
 
-An application implemented as two versions (in C++ and Python), which takes a semantic segmantion and its corresponding image as inputs, extracts each image segment from the segmentation and visualizes them in a GUI. Each pixel in the GUI is clickable, and that triggers a popup with metadata (seen in the image above) pertaining to that pixel. 
+An application implemented as two versions (in C++ and Python), which takes a semantic segmantion and its corresponding image as inputs, extracts each image segment from the segmentation and visualizes them in a GUI. Each pixel in the GUI is clickable, and that triggers a popup with metadata (seen in the image above) pertaining to that pixel.
 
 ## Preprocessing
 To convert annotated Kitti segmentation data (shaped `H x W`), run:
@@ -33,12 +33,12 @@ the steps in [this answer](https://github.com/rogersce/cnpy/issues/34#issuecomme
 
 ### Files
 ```
-+ gui.{hpp/cpp}         : Methods pertaining to gui operations (+ loading image and label file)
++ gui.{hpp/cpp}         : Methods pertaining to GUI operations (+ loading image and label file)
 + main.cpp              : Main file
 + pixel.{hpp/cpp}       : Class representing a pixel (contains label and score at that coordinate)
 + processor.{hpp/cpp}   : Extracts segments from the semantic segmentation
-+ segment.{hpp/cpp}     : Class representing each image segment. Contains segment pixels
-                          and contour pixels.
++ segment.{hpp/cpp}     : Class representing an image segment. Contains list of pixels and contour pixels
+                          that belong to said segment
 + semseg.{hpp/cpp}      : Class representing semantic segmentation
 ```
 
@@ -59,11 +59,13 @@ argparse
 
 ### Files
 ```
++ gui.py                : Methods pertaining to the GUI operations
 + main.py               : Main file
-+ processor.py          : File containing classes representing segments and pixels. Extracts segments
-                          from semantic segmentation.
-+ utils.py              : Contains gui operations as well as helper methods for loading image and
-                          semantic segmentation.
++ pixel.py              : Class representing a pixel (contains label and score at that coordinate)
++ processor.py          : Methods to extract segments from semantic segmentation
++ segment.py            : Class representing an image segment. Contains list of pixels and contour pixels
+                          that belong to said segment
++ utils.py              : Helper methods for loading and reading input data
 ```
 
 ### Run
