@@ -35,7 +35,8 @@ the steps in [this answer](https://github.com/rogersce/cnpy/issues/34#issuecomme
 + main.cpp              : Main file
 + pixel.{hpp/cpp}       : Class representing a pixel (contains score and label)
 + processor.{hpp/cpp}   : Extracts segments from the semantic segmentation
-+ segment.{hpp/cpp}     : Class representing each image segment. Contains segment pixels and contour pixels.
++ segment.{hpp/cpp}     : Class representing each image segment. Contains segment pixels 
+                          and contour pixels.
 + semseg.{hpp/cpp}      : Class representing semantic segmentation
 ```
 
@@ -59,11 +60,13 @@ argparse
 + main.py               : Main file
 + processor.py          : File containing classes representing segments and pixels. Extracts segments
                           from semantic segmentation.
-+ utils.py              : Contains gui operations as well as helper methods for loading image and semantic segmentation.
++ utils.py              : Contains gui operations as well as helper methods for loading image and 
+                          semantic segmentation.
 ```
 
 ### Run
 ```
 cd python/
-python3 main.py --image_path ../data/kitti/image_2/000010_10.png --segmentation_path ../data/000010_10.npy
+python3 main.py --image_path ../data/kitti/image_2/000010_10.png \
+                --segmentation_path ../data/000010_10.npy
 ```
