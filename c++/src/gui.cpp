@@ -84,23 +84,32 @@ void addTextLines(Mat image, int x, int y, vector<string> lines) {
   int paddingX = 5;
   int paddingY = 30;
 
+  int imgHeight = image.rows;
+  int imgWidth = image.cols;
   int n = lines.size();
 
   // Find the widest text line
   Size text = getMaxTextSize(lines, fontface, scale, thickness, baseline);
 
   // Top left corner of rectangle
-  int y_top = y - paddingY;
-  int x_left = x - paddingX;
+
+  int rectHeight = n * text.height + (n - 1) * linePadding;
+  int rectWidth = text.width + 2 * paddingX;
+  // Ensure we don't draw rect out of frame
+  int yTop = min(imgHeight - rectHeight, y - paddingY);
+  int xLeft = min(imgWidth - rectWidth, x - paddingX);
   // Upper left and bottom right corners of the rectangle
-  Point upperLeft = Point(x_left, y_top);
+  Point upperLeft = Point(xLeft, yTop);
   Point bottomRight = Point(
-    x_left + text.width + 2 * paddingX,
-    y_top + n * text.height + (n - 1) * linePadding
+    xLeft + rectWidth,
+    yTop + rectHeight
   );
   // Draw background rectangle
   rectangle(image, upperLeft, bottomRight, Scalar(0, 0, 0), CV_FILLED);
 
+  // Set text coordinates relative to upper left coordinate of rectangle
+  x = xLeft + paddingX;
+  y = yTop + paddingY;
   // Draw text lines on top of the rectangle
   for(int i = 0; i < lines.size(); i++) {
     putText(

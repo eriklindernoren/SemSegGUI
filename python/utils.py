@@ -64,14 +64,19 @@ def add_text(image, x, y, textlines):
 
     text_width, text_height = get_max_text_size(textlines, fontface, scale, thickness)
 
-    # Top left coordinate
-    y_top = y - padding_y
-    x_left = x - padding_x
+    # Rectangle height and width
+    rect_height = n * text_height + (n - 1) * line_padding
+    rect_width = text_width + 2 * padding_x
+    # Top-left coordinate of rect (ensure we don't draw out of frame)
+    y_top = min(h - rect_height, y - padding_y)
+    x_left = min(w - rect_width, x - padding_x)
     # Upper left and bottom right corners of the rectangle
     upper_left = (x_left, y_top)
-    bottom_right = (x_left + text_width + 2 * padding_x, y_top + n * text_height + (n - 1) * line_padding)
+    bottom_right = (x_left + rect_width, y_top + rect_height)
     cv2.rectangle(image, upper_left, bottom_right, (0, 0, 0), cv2.FILLED)
-
+    # Set text coordinate based on upper left corner of rect
+    x = x_left + padding_x
+    y = y_top + padding_y
     for line in textlines:
         cv2.putText(
             image, line, (x, y), fontFace=fontface, fontScale=scale, color=(255, 255, 255), thickness=thickness
