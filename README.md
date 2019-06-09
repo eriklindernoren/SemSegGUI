@@ -31,7 +31,7 @@ the steps in [this answer](https://github.com/rogersce/cnpy/issues/34#issuecomme
 
 ### Files
 ```
-+ gui.{hpp/cpp}         : Methods pertaining to gui operations
++ gui.{hpp/cpp}         : Methods pertaining to gui operations (+ loading image and label file)
 + main.cpp              : Main file
 + pixel.{hpp/cpp}       : Class representing a pixel (contains score and label)
 + processor.{hpp/cpp}   : Extracts segments from the semantic segmentation
