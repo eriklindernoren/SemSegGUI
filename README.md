@@ -3,7 +3,7 @@
 </p>
 
 
-# Assignment
+# Semantic Segmentation GUI
 
 An application implemented as two versions (in C++ and Python), which takes a semantic segmantion and its corresponding image as inputs, extracts each image segment from the segmentation and visualizes them in a GUI. Each pixel in the GUI is clickable, and that triggers a popup with metadata (seen in the image above) pertaining to that pixel. 
 
