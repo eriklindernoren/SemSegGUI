@@ -8,6 +8,7 @@
 
 using namespace std;
 
+// Class representing image segment
 class Segment {
   int label;
   set<Pixel> contourPixels;
@@ -36,6 +37,9 @@ class Segment {
 
 #endif // SEGMENT_H
 
+// Returns segment of which (x, y) is a member
 Segment* segmentCorrespondingToPoint(vector<Segment*>, int, int);
+// Returns true if (x, y) is not a member of any segment
 bool unexploredPoint(vector<Segment*>, int, int);
+// Frees memory allocated to segments
 void free(vector<Segment*>);

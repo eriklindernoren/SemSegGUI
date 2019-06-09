@@ -7,6 +7,13 @@
 #include <fstream>
 
 template <typename T>
+
+/**
+    Helper method which converts input to string format
+
+    @param t : input
+    @return string representation of t
+*/
 string toStr( const T & t ) {
    ostringstream os;
    os << setprecision(2) << t;
@@ -14,11 +21,24 @@ string toStr( const T & t ) {
 }
 
 
+/**
+    Loads an image corresponding to specified filename
+
+    @param filename : filename of image to load
+    @return image
+*/
 Mat loadImage(char* filename) {
   Mat image = imread(filename, CV_LOAD_IMAGE_COLOR);
   return image;
 }
 
+
+/**
+    Extract class names contained in file which filename points to
+
+    @param filename : filename pointing to text file with class names
+    @return vector of class names
+*/
 vector<string> extractLabels(char* filename) {
   ifstream file(filename);
   vector<string> labels;
@@ -29,6 +49,10 @@ vector<string> extractLabels(char* filename) {
 }
 
 
+/**
+    Returns size of the widest text line in textlines
+    @return size of widest text lines
+*/
 Size getMaxTextSize(vector<string> lines, int fontface, double scale, int thickness, int baseline) {
   Size maxSz;
   maxSz.width = -1;
@@ -41,6 +65,14 @@ Size getMaxTextSize(vector<string> lines, int fontface, double scale, int thickn
 }
 
 
+/**
+    Draws a black rectangle with metadata (specified by 'lines') at coordinate (x, y)
+
+    @param image
+    @param x : x coordinate of point
+    @param y : y coordinate of point
+    @param lines : vector of text lines (metadata)
+*/
 void addTextLines(Mat image, int x, int y, vector<string> lines) {
 
   // Style parameters
@@ -81,6 +113,16 @@ void addTextLines(Mat image, int x, int y, vector<string> lines) {
 }
 
 
+/**
+    Callback function that is triggered for left mouse clicks. Extracts relevant metadata
+    for the coordinate of the click and calls addTextLines to display the data.
+
+    @param event : event type
+    @param x : x coordinate of click
+    @param y : y coordinate of click
+    @param flags : ignored
+    @param userData : CallbackParams object containing image, segments and label names
+*/
 void mouseCallback(int event, int x, int y, int flags, void* userdata)
 {
      if  ( event == EVENT_LBUTTONUP )
@@ -113,6 +155,12 @@ void mouseCallback(int event, int x, int y, int flags, void* userdata)
 }
 
 
+/**
+    Returns a mapping from segment label to color
+
+    @param segments : image segments
+    @return colorMap : map from integer (segment label) to vector with rgb values
+*/
 map<int, vector<int>> getColorMap(vector<Segment*> segments) {
   map<int, vector<int>> colorMap;
   for(Segment* s : segments) {
@@ -123,6 +171,13 @@ map<int, vector<int>> getColorMap(vector<Segment*> segments) {
 }
 
 
+/**
+    Draws each segment contour to the image
+
+    @param image
+    @param segments : image segments
+    @param colorMap : map from integer (segment label) to vector with rgb values
+*/
 void drawContours(Mat& image, vector<Segment*> segments, map<int, vector<int>> colorMap) {
   for(Segment* s : segments)
     for(Pixel p : s->getCountour())
@@ -131,6 +186,15 @@ void drawContours(Mat& image, vector<Segment*> segments, map<int, vector<int>> c
 }
 
 
+/**
+    Main GUI method. Calls other methods extract color map, draw image (with contours)
+    and sets up callback for mouse click events. Then waits for key press to reset the frame
+    or the close the GUI.
+
+    @param image
+    @param segments : image segments
+    @param labels : class names
+*/
 void visualize(Mat image, vector<Segment*> segments, vector<string> labels) {
 
   // Get label to color map and draw contours
@@ -151,7 +215,6 @@ void visualize(Mat image, vector<Segment*> segments, vector<string> labels) {
 
   while(true){
 
-     // Display the image and wait for a keypress
      imshow("image", params.image);
 
      // Wait for key command

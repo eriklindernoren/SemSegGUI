@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 
+# Segment colors
 COLORS = [
     (0, 0, 0),
     (255, 255, 255),
@@ -22,22 +23,26 @@ COLORS = [
 
 
 def load_image(image_path):
+    """Loads input image"""
     image = cv2.imread(image_path)
     return image
 
 
 def load_segmentation(segmentation_path):
+    """Loads semantic segmentation"""
     segm = np.load(segmentation_path)
     return segm
 
 
 def extract_labels(label_path):
+    """Extracts segmentation labels from text file"""
     with open(label_path) as f:
         labels = f.read().splitlines()
     return labels
 
 
 def get_max_text_size(textlines, fontface, scale, thickness):
+    """Extracts the size of the widest text line"""
     max_size, _ = cv2.getTextSize(textlines[0], fontface, scale, thickness)
     for s in textlines[1:]:
         size, _ = cv2.getTextSize(s, fontface, scale, thickness)
@@ -47,6 +52,7 @@ def get_max_text_size(textlines, fontface, scale, thickness):
 
 
 def add_text(image, x, y, textlines):
+    """Draws a popup with metadata contained in textlines"""
     fontface = cv2.FONT_HERSHEY_SIMPLEX
     scale = 0.4
     thickness = 1
@@ -73,25 +79,29 @@ def add_text(image, x, y, textlines):
         y += line_padding
 
 
-def get_color_map(polygons):
+def get_color_map(segments):
+    """Returns a mapping from segmentation labels to a corresponding color"""
     color_map = {}
-    for p in polygons:
+    for p in segments:
         if p.label not in color_map:
             color_map[p.label] = COLORS[len(color_map) % len(COLORS)]
     return color_map
 
 
-def draw_contours(image, polygons, color_map):
-    for p in polygons:
-        pixels = np.array(list(p.contour_points))
+def draw_contours(image, segments, color_map):
+    """Draws segment contours"""
+    for p in segments:
+        pixels = np.array(list(p.contour_pixels))
         image[pixels[:, 0], pixels[:, 1]] = color_map[p.label]
 
 
-def visualize(image, polygons, labels):
-    def mouse_callback(event, x, y, flags, param):
+def visualize(image, segments, labels):
+    """Main GUI method. Opens a frame and waits for commands"""
 
+    def mouse_callback(event, x, y, flags, param):
+        """Callback method for mouse clicks. Triggers a popup in case of left clicks."""
         if event == cv2.EVENT_LBUTTONUP:
-            poly = [p for p in polygons if p.seen((y, x))][0]
+            poly = [p for p in segments if p.seen((y, x))][0]
             add_text(
                 image,
                 x,
@@ -100,15 +110,15 @@ def visualize(image, polygons, labels):
                     f"Point: ({x}, {y})",
                     f"Name: {labels[poly.label]}",
                     f"Label: {poly.label}",
-                    f"Score: {poly.points[(y, x)].score}",
+                    f"Score: {poly.pixels[(y, x)].score}",
                     f"Segment Score: {poly.score}",
                     f"Segment ID: {poly.id}",
                 ],
             )
 
     # Get label to color map
-    color_map = get_color_map(polygons)
-    draw_contours(image, polygons, color_map)
+    color_map = get_color_map(segments)
+    draw_contours(image, segments, color_map)
 
     cv2.namedWindow("image")
     cv2.setMouseCallback("image", mouse_callback)

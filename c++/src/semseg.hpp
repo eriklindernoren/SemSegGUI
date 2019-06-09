@@ -6,6 +6,8 @@ using namespace std;
 #ifndef MAXACTIVATION_H
 #define MAXACTIVATION_H
 
+// Class with label corresponding to the largest output at a point (x, y)
+// in the semantic segmentation. Also contains size of output (score).
 typedef struct MaxActivation {
   int label;
   int score;
@@ -18,6 +20,8 @@ typedef struct MaxActivation {
 #ifndef SEMSEG_H
 #define SEMSEG_H
 
+
+// Class representing the semantic segmentation
 class Semseg {
     vector<vector<vector<double>>> semseg;
     map<int, MaxActivation> activations;

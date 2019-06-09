@@ -31,13 +31,11 @@ int main(int argc, char** argv ) {
   char* label_path = argv[3];
   vector<string> labels = extractLabels(label_path);
 
-  printf("Number of classes: %d\n", (int)labels.size());
-
-  // Extract segments from semseg
+  // Extract each segments from the semantic segmentation
   vector<Segment*> segments = extractSegments(semseg);
   printf("Number of Segments %d\n", (int)segments.size());
 
-  // Visualize segments
+  // Trigger GUI
   visualize(image, segments, labels);
 
   // Free allocated memory

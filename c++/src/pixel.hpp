@@ -1,6 +1,7 @@
 #ifndef PIXEL_H
 #define PIXEL_H
 
+// Struct representing segmentation pixel
 struct Pixel {
   int x;
   int y;
