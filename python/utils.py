@@ -128,6 +128,7 @@ def visualize(image, segments, labels):
     cv2.namedWindow("image")
     cv2.setMouseCallback("image", mouse_callback)
 
+    # Save image clone to enable resets
     image_clone = image.copy()
 
     # Loop until 'q' is pressed
@@ -137,7 +138,7 @@ def visualize(image, segments, labels):
         cv2.imshow("image", image)
         key = cv2.waitKey(1) & 0xFF
 
-        # Press 'r' to reset the cropping region
+        # Press 'r' to reset the frame
         if key == ord("r"):
             image = image_clone.copy()
 
