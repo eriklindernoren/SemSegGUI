@@ -139,10 +139,9 @@ Pixel Segment::getPixel(int x, int y) {
 /**
   Returns the segment of which the point is a member.
 
+  @param segments : Known segments
   @param x : x coordinate of point
   @param y : y coordinate of point
-  @param label : label of the pixel
-  @param pixelScore : score of the pixel
 */
 Segment* segmentCorrespondingToPoint(vector<Segment*> segments, int x, int y) {
   for(Segment* s: segments)
