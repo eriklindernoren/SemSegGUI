@@ -137,7 +137,7 @@ Pixel Segment::getPixel(int x, int y) {
 
 
 /**
-  Adds pixel as contour pixel of the segment
+  Returns the segment of which the point is a member.
 
   @param x : x coordinate of point
   @param y : y coordinate of point
