@@ -1,6 +1,6 @@
-#include "image_utils.hpp"
+#include "gui.hpp"
 #include "processor.hpp"
-#include "mask.hpp"
+#include "semseg.hpp"
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <iostream>
@@ -21,16 +21,14 @@ int main(int argc, char** argv ) {
   char* image_path = argv[1];
   Mat image = loadImage(image_path);
 
-  // Extract segmentation mask
-  char* mask_path = argv[2];
+  // Extract segmentation semseg
+  char* semseg_path = argv[2];
+  Semseg semseg(semseg_path);
 
-  Mask mask(mask_path);
+  cout << "Segmentation shape: " << semseg.getRows() << " x " << semseg.getCols() << " x " << semseg.getClasses() << endl;
 
-  cout << mask.getRows() << " " << mask.getCols() << " " << mask.getClasses() << endl;
-
-  // Extract segments from mask
-  vector<Segment*> segments = extractSegments(mask);
-
+  // Extract segments from semseg
+  vector<Segment*> segments = extractSegments(semseg);
   printf("Number of Segments %d\n", (int)segments.size());
 
   // Visualize segments
@@ -38,7 +36,6 @@ int main(int argc, char** argv ) {
 
   // Free allocated memory
   free(segments);
-
 
   return 0;
 }

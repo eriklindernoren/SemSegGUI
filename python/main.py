@@ -3,8 +3,8 @@ import os
 import sys
 import random
 import numpy as np
-from utils import visualize, load_image, load_annotation
-from processor import Processor
+from utils import visualize, load_image, load_segmentation
+from processor import extract_segments
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Parser")
@@ -13,9 +13,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     image = load_image(args.image_path)
-    mask = load_annotation(args.segmentation_path)
+    mask = load_segmentation(args.segmentation_path)
 
-    proc = Processor()
-    segments = proc.extract_segments(mask)
+    segments = extract_segments(mask)
 
     visualize(image, segments)

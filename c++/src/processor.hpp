@@ -1,6 +1,6 @@
 #include "segment.hpp"
-#include "mask.hpp"
+#include "semseg.hpp"
 
 vector<vector<int>> getNeighbors(int, int);
-Segment* extractSegment(Mask&, int, int, int);
-vector<Segment*> extractSegments(Mask&);
+Segment* extractSegment(Semseg&, int, int, int);
+vector<Segment*> extractSegments(Semseg&);

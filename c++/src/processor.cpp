@@ -12,11 +12,11 @@ vector<vector<int>> getNeighbors(int x, int y) {
   return neighbors;
 }
 
-Segment* extractSegment(Mask& mask, int x, int y, int segmentId) {
+Segment* extractSegment(Semseg& semseg, int x, int y, int segmentId) {
   // Extract label and score at coordinate
-  MaxActivation act = mask.getLabelAndScore(x, y);
+  MaxActivation act = semseg.getLabelAndScore(x, y);
   int label = act.label;
-  Segment* segment = new Segment(label, segmentId, mask.getRows(), mask.getCols());
+  Segment* segment = new Segment(label, segmentId, semseg.getRows(), semseg.getCols());
 
   // Intialize stack with point (x, y)
   stack<vector<int>> s;
@@ -27,19 +27,19 @@ Segment* extractSegment(Mask& mask, int x, int y, int segmentId) {
     vector<int> point = s.top();
     s.pop();
     int x = point[0], y = point[1];
-    MaxActivation act = mask.getLabelAndScore(x, y);
+    MaxActivation act = semseg.getLabelAndScore(x, y);
     segment->addPixel(x, y, act.label, act.score);
 
     for(vector<int> neighbor : getNeighbors(x, y)) {
       int nx = neighbor[0], ny = neighbor[1];
 
       // Add as contour point if new point is out of bounds
-      if(!mask.boundaryCheck(nx, ny)) {
+      if(!semseg.boundaryCheck(nx, ny)) {
         segment->addContourPixel(x, y, act.label, act.score);
         continue;
       }
       // Extract label and score at neighboring point
-      MaxActivation nAct = mask.getLabelAndScore(nx, ny);
+      MaxActivation nAct = semseg.getLabelAndScore(nx, ny);
 
       // Label missmatch => contour point
       if(nAct.label != segment->getLabel())
@@ -52,14 +52,14 @@ Segment* extractSegment(Mask& mask, int x, int y, int segmentId) {
   return segment;
 }
 
-vector<Segment*> extractSegments(Mask& mask) {
+vector<Segment*> extractSegments(Semseg& semseg) {
   vector<Segment*> segments;
   printf("Segment\t\tLabel\t\tPixels\t\tScore\n");
-  for(int y = 0; y < mask.getRows(); y++) {
-    for(int x = 0; x < mask.getCols(); x++) {
+  for(int y = 0; y < semseg.getRows(); y++) {
+    for(int x = 0; x < semseg.getCols(); x++) {
       if(unexploredPoint(segments, x, y)) {
         int segmentId = segments.size();
-        Segment* s = extractSegment(mask, x, y, segmentId);
+        Segment* s = extractSegment(semseg, x, y, segmentId);
         segments.push_back(s);
         printf("%d\t\t%d\t\t%d\t\t%f\n", segmentId, s->getLabel(), (int)s->getSize(), s->getScore());
       }

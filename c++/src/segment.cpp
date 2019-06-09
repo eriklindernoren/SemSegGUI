@@ -1,7 +1,5 @@
 #include "segment.hpp"
 
-using namespace std;
-
 inline bool operator<(const Pixel& lhs, const Pixel& rhs) {
   return lhs.key < rhs.key;
 }

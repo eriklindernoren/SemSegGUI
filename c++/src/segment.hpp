@@ -34,7 +34,6 @@ class Segment {
     Pixel getPixel(int, int);
 };
 
-
 #endif // SEGMENT_H
 
 Segment* segmentCorrespondingToPoint(vector<Segment*>, int, int);

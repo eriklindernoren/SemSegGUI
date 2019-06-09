@@ -1,15 +1,34 @@
 import numpy as np
 import cv2
 
+COLORS = [
+    (0, 0, 0),
+    (255, 255, 255),
+    (255, 0, 0),
+    (0, 255, 0),
+    (0, 0, 255),
+    (255, 255, 0),
+    (0, 255, 255),
+    (255, 0, 255),
+    (192, 192, 192),
+    (128, 128, 128),
+    (128, 0, 0),
+    (128, 128, 0),
+    (0, 128, 0),
+    (128, 0, 128),
+    (0, 128, 128),
+    (0, 0, 128),
+]
+
 
 def load_image(image_path):
     image = cv2.imread(image_path)
     return image
 
 
-def load_annotation(annotation_path):
-    ann = np.load(annotation_path)
-    return ann
+def load_segmentation(segmentation_path):
+    segm = np.load(segmentation_path)
+    return segm
 
 
 def get_max_text_size(textlines, fontface, scale, thickness):
@@ -29,6 +48,7 @@ def add_text(image, x, y, textlines):
     padding_x = 5
     padding_y = 15
     n = len(textlines)
+    h, w = image.shape[:2]
 
     text_width, text_height = get_max_text_size(textlines, fontface, scale, thickness)
 
@@ -38,7 +58,7 @@ def add_text(image, x, y, textlines):
     # Upper left and bottom right corners of the rectangle
     upper_left = (x_left, y_top)
     bottom_right = (x_left + text_width + 2 * padding_x, y_top + n * text_height + (n - 1) * line_padding)
-    cv2.rectangle(image, upper_left, bottom_right, (0, 0, 0), -100)
+    cv2.rectangle(image, upper_left, bottom_right, (0, 0, 0), cv2.FILLED)
 
     for line in textlines:
         cv2.putText(
@@ -47,7 +67,21 @@ def add_text(image, x, y, textlines):
         y += line_padding
 
 
-def visualize(image, polygons=None):
+def get_color_map(polygons):
+    color_map = {}
+    for p in polygons:
+        if p.label not in color_map:
+            color_map[p.label] = COLORS[len(color_map) % len(COLORS)]
+    return color_map
+
+
+def draw_contours(image, polygons, color_map):
+    for p in polygons:
+        pixels = np.array(list(p.contour_points))
+        image[pixels[:, 0], pixels[:, 1]] = color_map[p.label]
+
+
+def visualize(image, polygons):
     def mouse_callback(event, x, y, flags, param):
 
         if event == cv2.EVENT_LBUTTONUP:
@@ -65,6 +99,10 @@ def visualize(image, polygons=None):
                 ],
             )
 
+    # Get label to color map
+    color_map = get_color_map(polygons)
+    draw_contours(image, polygons, color_map)
+
     cv2.namedWindow("image")
     cv2.setMouseCallback("image", mouse_callback)
 
@@ -72,10 +110,6 @@ def visualize(image, polygons=None):
 
     # Loop until 'q' is pressed
     while True:
-
-        for p in polygons:
-            pixels = np.array(list(p.contour_points))
-            image[pixels[:, 0], pixels[:, 1]] = 255
 
         # Display the image and wait for a keypress
         cv2.imshow("image", image)

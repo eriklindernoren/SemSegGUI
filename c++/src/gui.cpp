@@ -1,10 +1,10 @@
-#include "image_utils.hpp"
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include "gui.hpp"
 #include <iostream>
 #include <iomanip>
 #include <string>
 
-using namespace cv;
-using namespace std;
 
 template <typename T>
 string toStr( const T & t ) {
@@ -13,25 +13,28 @@ string toStr( const T & t ) {
    return os.str();
 }
 
+
 Mat loadImage(char* filename) {
   Mat image = imread(filename, CV_LOAD_IMAGE_COLOR);
   return image;
 }
 
+
 Size getMaxTextSize(vector<string> lines, int fontface, double scale, int thickness, int baseline) {
-  Size res;
-  res.width = -1;
+  Size maxSz;
+  maxSz.width = -1;
   for(string s : lines) {
     Size sz = getTextSize(s, fontface, scale, thickness, &baseline);
-    if(sz.width > res.width)
-      res = sz;
+    if(sz.width > maxSz.width)
+      maxSz = sz;
   }
-  return res;
+  return maxSz;
 }
+
 
 void addTextLines(Mat image, int x, int y, vector<string> lines) {
 
-  // Parameters
+  // Style parameters
   int fontface = FONT_HERSHEY_SIMPLEX;
   double scale = 0.4;
   int thickness = 1;
@@ -41,6 +44,8 @@ void addTextLines(Mat image, int x, int y, vector<string> lines) {
   int paddingY = 15;
 
   int n = lines.size();
+
+  // Find the widest text line
   Size text = getMaxTextSize(lines, fontface, scale, thickness, baseline);
 
   // Top left corner of rectangle
@@ -48,7 +53,11 @@ void addTextLines(Mat image, int x, int y, vector<string> lines) {
   int x_left = x - paddingX;
   // Upper left and bottom right corners of the rectangle
   Point upperLeft = Point(x_left, y_top);
-  Point bottomRight = Point(x_left + text.width + 2*paddingX, y_top + n*text.height + (n-1) * linePadding);
+  Point bottomRight = Point(
+    x_left + text.width + 2 * paddingX,
+    y_top + n * text.height + (n - 1) * linePadding
+  );
+  // Draw background rectangle
   rectangle(image, upperLeft, bottomRight, Scalar(0, 0, 0), CV_FILLED);
 
   // Draw text lines on top of the rectangle
@@ -62,19 +71,24 @@ void addTextLines(Mat image, int x, int y, vector<string> lines) {
   imshow("image", image);
 }
 
+
 void mouseCallback(int event, int x, int y, int flags, void* userdata)
 {
      if  ( event == EVENT_LBUTTONUP )
      {
+        // Extract image and segments
         CallbackParams* params = (CallbackParams*) userdata;
         Mat image = params->image;
         vector<Segment*> segments = params->segments;
+
+        // Find the segment that was clicked
         Segment* s = segmentCorrespondingToPoint(segments, x, y);
 
         cout  << "Left button of the mouse is clicked - position (" << x
               << ", " << y << ") - label " << s->getLabel()
               << " - pid " << s->getId() << endl;
 
+        // Define metadata to be visualized
         vector<string> lines;
         lines.push_back(toStr("Point (") + toStr(x) + toStr(", ") + toStr(y) + toStr(")"));
         lines.push_back(toStr("Label ") + toStr(s->getLabel()));
@@ -82,22 +96,37 @@ void mouseCallback(int event, int x, int y, int flags, void* userdata)
         lines.push_back(toStr("Segment Score ") + toStr(s->getScore()));
         lines.push_back(toStr("PID ") + toStr(s->getId()));
 
+        // Draw metadata
         addTextLines(image, x, y, lines);
      }
 }
 
-void drawContours(Mat& image, vector<Segment*> segments) {
+
+map<int, vector<int>> getColorMap(vector<Segment*> segments) {
+  map<int, vector<int>> colorMap;
   for(Segment* s : segments) {
-    for(Pixel p : s->getCountour()) {
-      image.at<Vec3b>(Point(p.x, p.y)) = {255, 255, 255};
-    }
+    if(colorMap.find(s->getLabel()) == colorMap.end())
+      colorMap[s->getLabel()] = COLORS[colorMap.size() % COLORS.size()];
   }
+  return colorMap;
 }
 
-void visualize(Mat& image, vector<Segment*> segments) {
 
-  drawContours(image, segments);
+void drawContours(Mat& image, vector<Segment*> segments, map<int, vector<int>> colorMap) {
+  for(Segment* s : segments)
+    for(Pixel p : s->getCountour())
+      for(int i = 0; i < 3; i++)
+        image.at<Vec3b>(Point(p.x, p.y))[i] = colorMap[s->getLabel()][i];
+}
 
+
+void visualize(Mat image, vector<Segment*> segments) {
+
+  // Get label to color map and draw contours
+  map<int, vector<int>> colorMap = getColorMap(segments);
+  drawContours(image, segments, colorMap);
+
+  // Define parameters for mouse click events
   CallbackParams params;
   params.image = image;
   params.segments = segments;
@@ -119,7 +148,6 @@ void visualize(Mat& image, vector<Segment*> segments) {
      // Press 'r' to reset the frame
      if(key == 'r')
          params.image = imageCopy.clone();
-
      // Press 'c' or 'q' to break from the loop
      else if(key == 'c' || key == 'q')
          break;

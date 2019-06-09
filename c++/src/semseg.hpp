@@ -1,13 +1,7 @@
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc.hpp>
-#include "cnpy.h"
 #include <map>
 #include <vector>
 
 using namespace std;
-using namespace cv;
-using namespace cnpy;
 
 #ifndef MAXACTIVATION_H
 #define MAXACTIVATION_H
@@ -21,12 +15,11 @@ typedef struct MaxActivation {
 
 #endif // MAXACTIVATION_H
 
+#ifndef SEMSEG_H
+#define SEMSEG_H
 
-#ifndef MASK_H
-#define MASK_H
-
-class Mask {
-    vector<vector<vector<double>>> mask;
+class Semseg {
+    vector<vector<vector<double>>> semseg;
     map<int, MaxActivation> activations;
     int rows;
     int cols;
@@ -35,7 +28,7 @@ class Mask {
   private:
     int getKey(int, int);
   public:
-    Mask(char *filename);
+    Semseg(char *filename);
     MaxActivation getLabelAndScore(int, int);
     int getRows();
     int getCols();
@@ -43,5 +36,4 @@ class Mask {
     bool boundaryCheck(int, int);
 };
 
-
-#endif // MASK_H
+#endif // SEMSEG_H
