@@ -1,10 +1,7 @@
 #include "gui.hpp"
 #include "processor.hpp"
 #include "semseg.hpp"
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
 #include <iostream>
-#include <string>
 #include "cnpy.h"
 
 using namespace cv;
@@ -13,7 +10,7 @@ using namespace std;
 int main(int argc, char** argv ) {
   if( argc != 4)
   {
-   cout <<" Usage: app <image-path> <semseg-path> <label-path>" << endl;
+   printf("Usage: ./app <image-path> <semseg-path> <label-path>\n");
    return -1;
   }
 
