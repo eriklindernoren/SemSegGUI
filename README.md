@@ -1,5 +1,9 @@
 # Apple Home Assignment
 
+<p align="center">
+    <img src="assets/gui.png" width="600"\>
+</p>
+
 ## Preprocessing
 To convert annotated Kitti segmentation data (shaped `H x W`), run:
 
@@ -13,10 +17,10 @@ as input to the application, along with the corresponding image `data/kitti/imag
 ## GUI
 Actions:
 ```
-+ Left mouse click  : Triggers popup with metadata
-+ 'r'               : Resets the frame
-+ 'c'               : Closes the application
-+ 'q'               : Closes the application
++ Left mouse click      : Triggers popup with metadata
++ 'r'                   : Resets the frame
++ 'c'                   : Closes the application
++ 'q'                   : Closes the application
 ```
 
 ## C++
