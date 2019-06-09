@@ -11,7 +11,7 @@ An application implemented as two versions (in C++ and Python), which takes a se
 To convert annotated Kitti segmentation data (shaped `H x W`), run:
 
 ```
-python3 kitti_to_numpy.py --segmentation_path data/kitti/segmentation/000010_10.png
+$ python3 kitti_to_numpy.py --segmentation_path data/kitti/segmentation/000010_10.png
 ```
 
 This will create a file `data/000010_10.npy` with the shape `H x W x NumClasses`, which will be used
@@ -45,8 +45,8 @@ the steps in [this answer](https://github.com/rogersce/cnpy/issues/34#issuecomme
 
 ### Run
 ```
-cd c++/
-./app ../data/kitti/image_2/000010_10.png ../data/000010_10.npy ../data/kitti/labels.txt
+$ cd c++/
+$ ./app ../data/kitti/image_2/000010_10.png ../data/000010_10.npy ../data/kitti/labels.txt
 ```
 
 ## Python
@@ -69,8 +69,8 @@ argparse
 
 ### Run
 ```
-cd python/
-python3 main.py --image_path ../data/kitti/image_2/000010_10.png \
-                --segmentation_path ../data/000010_10.npy \
-                --label_path ../data/kitti/labels.txt
+$ cd python/
+$ python3 main.py   --image_path ../data/kitti/image_2/000010_10.png \
+                    --segmentation_path ../data/000010_10.npy \
+                    --label_path ../data/kitti/labels.txt
 ```
