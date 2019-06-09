@@ -37,8 +37,8 @@ the steps in [this answer](https://github.com/rogersce/cnpy/issues/34#issuecomme
 + main.cpp              : Main file
 + pixel.{hpp/cpp}       : Class representing a pixel (contains label and score at that coordinate)
 + processor.{hpp/cpp}   : Extracts segments from the semantic segmentation
-+ segment.{hpp/cpp}     : Class representing an image segment. Contains list of pixels and contour pixels
-                          that belong to said segment
++ segment.{hpp/cpp}     : Class representing an image segment. Contains list of pixels and contour 
+                          pixels that belong to said segment
 + semseg.{hpp/cpp}      : Class representing semantic segmentation
 ```
 
@@ -63,8 +63,8 @@ argparse
 + main.py               : Main file
 + pixel.py              : Class representing a pixel (contains label and score at that coordinate)
 + processor.py          : Methods to extract segments from semantic segmentation
-+ segment.py            : Class representing an image segment. Contains list of pixels and contour pixels
-                          that belong to said segment
++ segment.{hpp/cpp}     : Class representing an image segment. Contains list of pixels and contour 
+                          pixels that belong to said segment
 + utils.py              : Helper methods for loading and reading input data
 ```
 
