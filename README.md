@@ -1,4 +1,4 @@
-# Apple Home Assignment
+# Assignment
 
 <p align="center">
     <img src="assets/gui.png" width="600"\>
