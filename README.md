@@ -22,8 +22,7 @@ Actions:
 ```
 + Left mouse click      : Triggers popup with metadata
 + 'r'                   : Resets the frame
-+ 'c'                   : Closes the application
-+ 'q'                   : Closes the application
++ 'c' / 'q'             : Closes the application
 ```
 
 ## C++
@@ -36,7 +35,7 @@ the steps in [this answer](https://github.com/rogersce/cnpy/issues/34#issuecomme
 ```
 + gui.{hpp/cpp}         : Methods pertaining to gui operations (+ loading image and label file)
 + main.cpp              : Main file
-+ pixel.{hpp/cpp}       : Class representing a pixel (contains score and label)
++ pixel.{hpp/cpp}       : Class representing a pixel (contains label and score at that coordinate)
 + processor.{hpp/cpp}   : Extracts segments from the semantic segmentation
 + segment.{hpp/cpp}     : Class representing each image segment. Contains segment pixels
                           and contour pixels.
