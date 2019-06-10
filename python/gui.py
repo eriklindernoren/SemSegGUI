@@ -34,12 +34,15 @@ def get_max_text_size(textlines, fontface, scale, thickness):
 
 def add_text(image, x, y, textlines):
     """Draws a popup with metadata contained in textlines"""
+
+    # Style parameters
     fontface = cv2.FONT_HERSHEY_SIMPLEX
     scale = 0.4
     thickness = 1
     line_padding = 30
     padding_x = 5
     padding_y = 30
+
     n = len(textlines)
     h, w = image.shape[:2]
 
@@ -87,18 +90,19 @@ def visualize(image, segments, labels):
     def mouse_callback(event, x, y, flags, param):
         """Callback method for mouse clicks. Triggers a popup in case of left clicks."""
         if event == cv2.EVENT_LBUTTONUP:
-            poly = [p for p in segments if p.seen((y, x))][0]
+            # Find segment of which the point is a member
+            segment = [s for s in segments if s.seen((y, x))][0]
             add_text(
                 image,
                 x,
                 y,
                 [
                     f"Point: ({x}, {y})",
-                    f"Name: {labels[poly.label]}",
-                    f"Label: {poly.label}",
-                    f"Score: {poly.pixels[(y, x)].score}",
-                    f"Segment Score: {poly.score}",
-                    f"Segment ID: {poly.id}",
+                    f"Name: {labels[segment.label]}",
+                    f"Label: {segment.label}",
+                    f"Score: {segment.pixels[(y, x)].score}",
+                    f"Segment Score: {segment.score}",
+                    f"Segment ID: {segment.id}",
                 ],
             )
 
@@ -112,17 +116,18 @@ def visualize(image, segments, labels):
     # Save image clone to enable resets
     image_clone = image.copy()
 
-    # Loop until 'q' is pressed
+    # Loop until 'q' or 'c' is pressed
     while True:
 
-        # Display the image and wait for a keypress
         cv2.imshow("image", image)
+
+        # Wait for keypress
         key = cv2.waitKey(1) & 0xFF
 
         # Press 'r' to reset the frame
         if key == ord("r"):
             image = image_clone.copy()
 
-        # Press 'c' to break from the loop
+        # Press 'q' or 'c' to break from the loop
         elif key in [ord("q"), ord("c")]:
             break

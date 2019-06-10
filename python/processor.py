@@ -28,23 +28,30 @@ def extract_segment(semseg, point, segment_id):
     returns: Segment
         image segment
     """
-    r, c = point
-    h, w = semseg.shape[:2]
-    label = semseg[r, c].argmax()
+
+    def within_bounds(p):
+        """Checks whether point is within frame"""
+        r, c = p
+        h, w = semseg.shape[:2]
+        return all([r >= 0, r < h, c >= 0, c < w])
+
+    # Get label of segment
+    label = semseg[point].argmax()
+    # Define new segment object
     segment = Segment(label, segment_id)
+    # Stack for dfs
     stack = [point]
     while stack:
         point = stack.pop()
-        r, c = point
-        label, score = semseg[r, c].argmax(), semseg[r, c].max()
+        label, score = semseg[point].argmax(), semseg[point].max()
+        # Add point as member of segment
         segment.add_pixel(point, label, score)
-        for neighbor in get_neighbors((r, c)):
-            nr, nc = neighbor
-            if not all([nr >= 0, nr < h, nc >= 0, nc < w]) or semseg[nr, nc].argmax() != segment.label:
-                # Set pixel as contour pixel if neighbor is out of frame or of other label
+        for neighbor in get_neighbors(point):
+            # If neighbor is out of frame or of other class than segment => contour point
+            if not within_bounds(neighbor) or semseg[neighbor].argmax() != segment.label:
                 segment.add_contour_pixel(point)
+            # Add to stack if neighbor has not been visited
             elif not segment.seen(neighbor):
-                # Explore neighbor
                 stack.append(neighbor)
 
     return segment
@@ -62,15 +69,13 @@ def extract_segments(semseg):
         list of image segments
     """
     segments = []
-    pid = 0
     print("Segment\t\tLabel\t\tPixels\t\tScore")
     for r in range(semseg.shape[0]):
         for c in range(semseg.shape[1]):
-            # If the pixel does not belong to a segment we create a new one
+            # If the pixel does not belong to a known segment => extract new segment
             if not any([p.seen((r, c)) for p in segments]):
-                s = extract_segment(semseg, (r, c), pid)
+                s = extract_segment(semseg, (r, c), len(segments))
+                print("%d\t\t%d\t\t%d\t\t%f" % (len(segments), s.label, len(s.pixels), s.score))
                 segments.append(s)
-                print("%d\t\t%d\t\t%d\t\t%f" % (pid, s.label, len(s.pixels), s.score))
-                pid += 1
 
     return segments
