@@ -33,7 +33,7 @@ the steps in [this answer](https://github.com/rogersce/cnpy/issues/34#issuecomme
 
 ### Files
 ```
-+ gui.{hpp/cpp}         : Methods pertaining to GUI operations (+ loading image and label file)
++ gui.{hpp/cpp}         : Methods pertaining to GUI operations
 + main.cpp              : Main file
 + pixel.{hpp/cpp}       : Contains Pixel class. Keeps track of score and label at each coordinate
 + processor.{hpp/cpp}   : Extracts segments from the semantic segmentation
@@ -60,7 +60,7 @@ argparse
 
 ### Files
 ```
-+ gui.py                : Methods pertaining to the GUI operations
++ gui.py                : Methods pertaining to GUI operations
 + main.py               : Main file
 + pixel.py              : Contains Pixel class. Keeps track of score and label at each coordinate
 + processor.py          : Methods to extract segments from semantic segmentation
