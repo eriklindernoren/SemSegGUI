@@ -139,38 +139,21 @@ void mouseCallback(int event, int x, int y, int flags, void* userdata)
 
 
 /**
-    Returns a mapping from segment label to color
-
-    @param segments : image segments
-    @return colorMap : map from integer (segment label) to vector with rgb values
-*/
-map<int, vector<int>> getColorMap(vector<Segment*> segments) {
-  map<int, vector<int>> colorMap;
-  for(Segment* s : segments) {
-    if(colorMap.find(s->getLabel()) == colorMap.end())
-      colorMap[s->getLabel()] = COLORS[colorMap.size() % COLORS.size()];
-  }
-  return colorMap;
-}
-
-
-/**
     Draws each segment contour to the image
 
     @param image
     @param segments : image segments
-    @param colorMap : map from integer (segment label) to vector with rgb values
 */
-void drawContours(Mat& image, vector<Segment*> segments, map<int, vector<int>> colorMap) {
+void drawContours(Mat& image, vector<Segment*> segments) {
   for(Segment* s : segments)
     for(Pixel p : s->getCountour())
       for(int i = 0; i < 3; i++)
-        image.at<Vec3b>(Point(p.x, p.y))[i] = colorMap[s->getLabel()][i];
+        image.at<Vec3b>(Point(p.x, p.y))[i] = COLORS[s->getLabel()][i];
 }
 
 
 /**
-    Main GUI method. Calls other methods to extract color map, draw image (with contours)
+    Main GUI method. Calls other methods to draw image (with contours)
     and sets up callback for mouse click events. Then waits for key press to reset the frame
     or to the close the GUI.
 
@@ -180,9 +163,8 @@ void drawContours(Mat& image, vector<Segment*> segments, map<int, vector<int>> c
 */
 void visualize(Mat image, vector<Segment*> segments, vector<string> labels) {
 
-  // Get label to color map and draw contours
-  map<int, vector<int>> colorMap = getColorMap(segments);
-  drawContours(image, segments, colorMap);
+  // Draw contours of segments
+  drawContours(image, segments);
 
   // Define parameters for mouse click events
   CallbackParams params;
