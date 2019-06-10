@@ -33,11 +33,7 @@ struct CallbackParams {
 
 // Converts input to string repr.
 template <typename T>
-string toStr( const T & t );
-// Loads image corresponding to filename
-Mat loadImage(char*);
-// Extracts class labels from file
-vector<string> extractLabels(char*);
+string toStr(const T& t);
 // Draws metadata to image
 void addTextLines(Mat, int, int, vector<string>);
 // Callback for left mouse clicks. Triggers drawing of metadata

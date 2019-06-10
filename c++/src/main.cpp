@@ -1,3 +1,4 @@
+#include "utils.hpp"
 #include "gui.hpp"
 #include "processor.hpp"
 #include "semseg.hpp"

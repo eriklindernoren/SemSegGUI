@@ -4,9 +4,10 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
-#include <fstream>
 
-template <typename T>
+using namespace std;
+using namespace cv;
+
 
 /**
     Helper method which converts input to string format
@@ -14,38 +15,11 @@ template <typename T>
     @param t : input
     @return string representation of t
 */
-string toStr( const T & t ) {
+template <typename T>
+string toStr(const T& t) {
    ostringstream os;
    os << setprecision(2) << t;
    return os.str();
-}
-
-
-/**
-    Loads an image corresponding to specified filename
-
-    @param filename : filename of image to load
-    @return image
-*/
-Mat loadImage(char* filename) {
-  Mat image = imread(filename, CV_LOAD_IMAGE_COLOR);
-  return image;
-}
-
-
-/**
-    Extract class names contained in file
-
-    @param filename : filename pointing to text file with class names
-    @return vector of class names
-*/
-vector<string> extractLabels(char* filename) {
-  ifstream file(filename);
-  vector<string> labels;
-  string str;
-  while(getline(file, str))
-    labels.push_back(str);
-  return labels;
 }
 
 
