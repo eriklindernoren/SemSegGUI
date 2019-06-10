@@ -92,7 +92,7 @@ def draw_contours(image, segments):
     """Draws segment contours"""
     for p in segments:
         pixels = np.array(list(p.contour_pixels))
-        image[pixels[:, 0], pixels[:, 1]] = COLORS[p.label]
+        image[pixels[:, 0], pixels[:, 1]] = COLORS[p.label % len(COLORS)]
 
 
 def visualize(image, segments, labels):

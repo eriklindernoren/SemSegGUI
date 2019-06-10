@@ -148,7 +148,7 @@ void drawContours(Mat& image, vector<Segment*> segments) {
   for(Segment* s : segments)
     for(Pixel p : s->getCountour())
       for(int i = 0; i < 3; i++)
-        image.at<Vec3b>(Point(p.x, p.y))[i] = COLORS[s->getLabel()][i];
+        image.at<Vec3b>(Point(p.x, p.y))[i] = COLORS[s->getLabel() % COLORS.size()][i];
 }
 
 
