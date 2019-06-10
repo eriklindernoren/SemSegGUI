@@ -64,9 +64,7 @@ void addTextLines(Mat image, int x, int y, vector<string> lines) {
 
   // Find the widest text line
   Size text = getMaxTextSize(lines, fontface, scale, thickness, baseline);
-
-  // Top left corner of rectangle
-
+  // Height and width of the background rectangle
   int rectHeight = n * text.height + (n - 1) * linePadding;
   int rectWidth = text.width + 2 * paddingX;
   // Ensure we don't draw rect out of frame
