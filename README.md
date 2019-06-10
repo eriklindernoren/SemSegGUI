@@ -8,13 +8,13 @@
 An application implemented as two versions (in C++ and Python), which takes a semantic segmantion and its corresponding image as inputs, extracts each image segment from the segmentation and visualizes them in a GUI. Each pixel in the GUI is clickable, and that triggers a popup with metadata (seen in the image above) pertaining to that pixel.
 
 ## Preprocessing
-To convert annotated Kitti segmentation data (shaped `H x W`), run:
+To convert annotated Kitti segmentation data to the expected shape, run:
 
 ```
 $ python3 kitti_to_numpy.py --segmentation_path data/kitti/segmentation/000010_10.png
 ```
 
-This will create a file `data/000010_10.npy` with the shape `H x W x NumClasses`, which will be used
+This will create a file `data/000010_10.npy` with the shape `H x W x NumClasses`, which can be used
 as input to the application, along with the corresponding image `data/kitti/image_2/000010_10.png`.
 
 ## GUI
